@@ -39,5 +39,7 @@
     "react-native-worklets": "0.5.1",
     "expo-google-app-auth": "~8.3.0",
     "expo-application": "~7.0.7"
+  },
+    "devDependencies": {
   }
 }
