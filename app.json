@@ -1,14 +1,15 @@
 {
   "expo": {
-    "name": "swamiji-app",
+    "name": "sriramanujavani",
     "slug": "swamiji-app",
     "version": "1.0.0",
+    "scheme": "sriramanujavani",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./src/assets/Images/Icon-512.jpg",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./src/assets/Images/Icon-512.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,13 +18,27 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./src/assets/Images/Icon-512.jpg",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "userInterfaceStyle": "light",
+      "edgeToEdgeEnabled": true,
+      "package": "com.sunil_s_n.swamijiapp"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./src/assets/Images/icon-1242-2436.jpg"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "db07dec1-2312-4f8b-8af9-0904eeea6f50"
+      }
+    },
+    "owner": "sunil_s_n",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/db07dec1-2312-4f8b-8af9-0904eeea6f50"
     }
   }
 }

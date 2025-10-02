@@ -1,20 +1,36 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from "react";
+import { View, StatusBar } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+
+import { AppNavigator } from "./src/components/AppNavigator";
+import Loader from "./src/components/Loader";
 
 export default function App() {
+  const [loading, setLoading] = useState(false);
+  const [userName, setUserName] = useState(null);
+
+  // Renamed to navigateWithLoader
+  const navigateWithLoader = (navigationFunc) => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      navigationFunc();
+    }, 800);
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View style={{ flex: 1 }}>
+      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
+      
+      <NavigationContainer>
+        <AppNavigator
+          loading={loading}
+          navigateWithLoader={navigateWithLoader} // updated prop
+          setUserName={setUserName}
+          userName={userName}
+        />
+      </NavigationContainer>
+      <Loader visible={loading} />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
