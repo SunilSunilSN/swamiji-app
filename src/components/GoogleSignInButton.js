@@ -6,9 +6,10 @@ import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 
 export default function GoogleSignInButton({ onSuccess }) {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    expoClientId: "351979190801-6jmjckhvrjmkmio5v932lnru44flbku6.apps.googleusercontent.com", // Web client ID
+    // expoClientId: "351979190801-6jmjckhvrjmkmio5v932lnru44flbku6.apps.googleusercontent.com", // Web client ID
     iosClientId: "351979190801-qtm9rl7df5okpcr00odbvq1ue1sug8m5.apps.googleusercontent.com",
-    useProxy: true, // ✅ Required for Expo Go
+    androidClientId: "351979190801-12akn49pq2io70aso2h7v442k9pn6bnu.apps.googleusercontent.com",
+    useProxy: false, // ✅ Required for Expo Go
   });
 
   React.useEffect(() => {
@@ -32,7 +33,7 @@ export default function GoogleSignInButton({ onSuccess }) {
         marginTop: 15,
       }}
     >
-      <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>
+      <Text style={{ color: "red", textAlign: "center", fontWeight: "bold" }}>
         Sign in with Google
       </Text>
     </TouchableOpacity>

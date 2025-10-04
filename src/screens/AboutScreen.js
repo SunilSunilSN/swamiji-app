@@ -119,7 +119,7 @@ const handleInView = useCallback((inView, index) => {
           <View>
             {/* Background Image */}
             <Image
-              source={require("../assets/Images/AboutBagr.png")} // replace with your image
+              source={require("../assets/Images/AboutBagr.jpg")} // replace with your image
               style={{
                 width: "100%",
                 height: "100%",

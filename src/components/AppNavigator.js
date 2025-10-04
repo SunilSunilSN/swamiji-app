@@ -1,34 +1,26 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { View, Text, StyleSheet, Alert, Animated } from "react-native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
-  DrawerItemList,
   DrawerItem,
+  useDrawerStatus,
 } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
-import LoginScreen from "../screens/LoginScreen";
-import RegistrationScreen from "../screens/RegistrationScreen";
+
 import HomeScreen from "../screens/HomeScreen";
 import AboutScreen from "../screens/AboutScreen";
-import { useDrawerStatus } from "@react-navigation/drawer";
-const Stack = createNativeStackNavigator();
+import LoginScreen from "../screens/LoginScreen";
+import RegistrationScreen from "../screens/RegistrationScreen";
+
 const Drawer = createDrawerNavigator();
 
-// Custom Drawer Content to display username
-function CustomDrawerContent({ navigation, state, descriptors, userName }) {
+// Custom Drawer
+function CustomDrawerContent({ navigation, state, descriptors, userName, setUserName }) {
   const isDrawerOpen = useDrawerStatus() === "open";
 
-  // Animations
-  const slideAnims = useRef(
-    state.routes.map(() => new Animated.Value(-50))
-  ).current;
-  const fadeAnims = useRef(
-    state.routes.map(() => new Animated.Value(0))
-  ).current;
-  const logoutSlide = useRef(new Animated.Value(-50)).current;
-  const logoutFade = useRef(new Animated.Value(0)).current;
+  const slideAnims = useRef(state.routes.map(() => new Animated.Value(-50))).current;
+  const fadeAnims = useRef(state.routes.map(() => new Animated.Value(0))).current;
 
   useEffect(() => {
     if (isDrawerOpen) {
@@ -37,29 +29,13 @@ function CustomDrawerContent({ navigation, state, descriptors, userName }) {
           Animated.timing(slideAnims[i], {
             toValue: 0,
             duration: 400,
-            delay: i * 150,
+            delay: i * 120,
             useNativeDriver: true,
           }),
           Animated.timing(fadeAnims[i], {
             toValue: 1,
             duration: 400,
-            delay: i * 150,
-            useNativeDriver: true,
-          }),
-        ])
-      );
-      animations.push(
-        Animated.parallel([
-          Animated.timing(logoutSlide, {
-            toValue: 0,
-            duration: 400,
-            delay: state.routes.length * 150,
-            useNativeDriver: true,
-          }),
-          Animated.timing(logoutFade, {
-            toValue: 1,
-            duration: 400,
-            delay: state.routes.length * 150,
+            delay: i * 120,
             useNativeDriver: true,
           }),
         ])
@@ -70,8 +46,6 @@ function CustomDrawerContent({ navigation, state, descriptors, userName }) {
         slideAnims[i].setValue(-50);
         fadeAnims[i].setValue(0);
       });
-      logoutSlide.setValue(-50);
-      logoutFade.setValue(0);
     }
   }, [isDrawerOpen]);
 
@@ -82,7 +56,8 @@ function CustomDrawerContent({ navigation, state, descriptors, userName }) {
         text: "Logout",
         style: "destructive",
         onPress: () => {
-          navigation.reset({ index: 0, routes: [{ name: "Login" }] });
+          setUserName(null);
+          navigation.navigate("Home");
         },
       },
     ]);
@@ -92,19 +67,22 @@ function CustomDrawerContent({ navigation, state, descriptors, userName }) {
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView>
         <View style={styles.drawerHeader}>
-          <Text style={styles.drawerUsername}>Hello, {userName}!</Text>
+          <Text style={styles.drawerUsername}>
+            {userName ? `Hello, ${userName}!` : "Welcome!"}
+          </Text>
         </View>
 
         {state.routes.map((route, index) => {
           const focused = state.index === index;
           const { title, drawerLabel } = descriptors[route.key].options;
-          let iconName;
-          if (route.name === "Home")
-            iconName = focused ? "home" : "home-outline";
+
+          let iconName = "ellipse-outline";
+          if (route.name === "Home") iconName = focused ? "home" : "home-outline";
           if (route.name === "About")
-            iconName = focused
-              ? "information-circle"
-              : "information-circle-outline";
+            iconName = focused ? "information-circle" : "information-circle-outline";
+          if (route.name === "Login") iconName = "log-in-outline";
+          if (route.name === "Registration") iconName = "person-add-outline";
+
           return (
             <Animated.View
               key={route.key}
@@ -116,7 +94,9 @@ function CustomDrawerContent({ navigation, state, descriptors, userName }) {
               <DrawerItem
                 label={drawerLabel ?? title ?? route.name}
                 focused={focused}
-                onPress={() => navigation.navigate(route.name)}
+                onPress={() =>
+                  navigation.navigate(route.name) // ✅ loader will trigger in screen
+                }
                 labelStyle={{
                   fontSize: 16,
                   fontWeight: focused ? "bold" : "normal",
@@ -127,9 +107,7 @@ function CustomDrawerContent({ navigation, state, descriptors, userName }) {
                   borderRadius: 8,
                   marginHorizontal: 8,
                 }}
-                icon={({ size, color }) => (
-                  <Ionicons name={iconName} size={size} color={"#800000"} />
-                )}
+                icon={({ size }) => <Ionicons name={iconName} size={size} color="#800000" />}
               />
             </Animated.View>
           );
@@ -137,101 +115,68 @@ function CustomDrawerContent({ navigation, state, descriptors, userName }) {
       </DrawerContentScrollView>
 
       {/* Logout pinned at bottom */}
-      <Animated.View
-        style={{
-          transform: [{ translateX: logoutSlide }],
-          opacity: logoutFade,
-          marginBottom: 50, // spacing from bottom
-        }}
-      >
+      <View style={{ marginBottom: 40 }}>
         <DrawerItem
           label="Logout"
           onPress={handleLogout}
-          labelStyle={{
-            fontSize: 16,
-            fontWeight: "bold",
-            color: "#800000",
-          }}
+          labelStyle={{ fontSize: 16, fontWeight: "bold", color: "#800000" }}
           style={{
-            backgroundColor: "#ffe6e6", // remove active highlight
+            backgroundColor: "#ffe6e6",
             borderRadius: 8,
             marginHorizontal: 8,
           }}
-          icon={({ size }) => (
-            <Ionicons name="log-out-outline" size={size} color="#800000" />
-          )}
+          icon={({ size }) => <Ionicons name="log-out-outline" size={size} color="#800000" />}
         />
-      </Animated.View>
+      </View>
     </View>
   );
 }
-// Drawer navigator for Home & About
-function DrawerNavigator({ route, navigateWithLoader }) {
-  const userName = route?.params?.userName || "UserAppp";
 
+export const AppNavigator = ({ userName, setUserName, navigateWithLoader }) => {
   return (
     <Drawer.Navigator
+      initialRouteName="Home"
       screenOptions={{
-        headerStyle: { backgroundColor: "#800000", },
+        headerStyle: { backgroundColor: "#800000" },
         headerTintColor: "#fff",
         headerTitleStyle: { fontWeight: "bold" },
       }}
       drawerContent={(props) => (
-        <CustomDrawerContent {...props} userName={userName} />
+        <CustomDrawerContent {...props} userName={userName} setUserName={setUserName} />
       )}
     >
-      <Drawer.Screen name="Home" initialParams={{ userName }}>
+      <Drawer.Screen name="Home">
         {(props) => (
-          <HomeScreen {...props} navigateWithLoader={navigateWithLoader} />
+          <HomeScreen
+            {...props}
+            navigateWithLoader={navigateWithLoader} // ✅ loader here
+          />
         )}
       </Drawer.Screen>
-      <Drawer.Screen name="About" initialParams={{ userName }}>
+
+      <Drawer.Screen name="About">
+        {(props) => <AboutScreen {...props} navigateWithLoader={navigateWithLoader} />}
+      </Drawer.Screen>
+
+      <Drawer.Screen name="Login">
         {(props) => (
-          <AboutScreen {...props} navigateWithLoader={navigateWithLoader} />
+          <LoginScreen
+            {...props}
+            setUserName={setUserName} // ✅ update global name
+            navigateWithLoader={navigateWithLoader}
+          />
+        )}
+      </Drawer.Screen>
+
+      <Drawer.Screen name="Registration">
+        {(props) => (
+          <RegistrationScreen {...props} navigateWithLoader={navigateWithLoader} />
         )}
       </Drawer.Screen>
     </Drawer.Navigator>
   );
-}
-
-// Main Stack navigator
-export const AppNavigator = ({ navigateWithLoader, userName, setUserName }) => {
-  return (
-    <Stack.Navigator>
-      {/* Login & Registration (no header) */}
-      <Stack.Screen name="Login" options={{ headerShown: false }}>
-        {(props) => (
-          <LoginScreen
-            {...props}
-            navigateWithLoader={navigateWithLoader}
-            setUserName={setUserName}
-          />
-        )}
-      </Stack.Screen>
-
-      <Stack.Screen name="Registration" options={{ headerShown: false }}>
-        {(props) => (
-          <RegistrationScreen
-            {...props}
-            navigateWithLoader={navigateWithLoader}
-            setUserName={setUserName}
-          />
-        )}
-      </Stack.Screen>
-
-      {/* Drawer (Home & About) */}
-      <Stack.Screen name="Main" options={{ headerShown: false }}>
-        {(props) => (
-          <DrawerNavigator
-            {...props}
-            navigateWithLoader={navigateWithLoader}
-            userName={userName}
-          />
-        )}
-      </Stack.Screen>
-    </Stack.Navigator>
-  );
 };
+
 const styles = StyleSheet.create({
   drawerHeader: {
     height: 50,

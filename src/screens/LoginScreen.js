@@ -28,11 +28,14 @@ import {
 } from "react-native-responsive-dimensions";
 const { height } = Dimensions.get("window");
 import GoogleSignInButton from "../components/GoogleSignInButton";
-export default function LoginScreen({ navigation, navigateWithLoader }) {
+export default function LoginScreen({
+  navigation,
+  navigateWithLoader,
+  setUserName,
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [userName, setUserName] = useState("");
 
   const offsetY = useSharedValue(0);
 
@@ -61,8 +64,9 @@ export default function LoginScreen({ navigation, navigateWithLoader }) {
       return;
     }
     setLoading(true);
+
     try {
-      // Sign in
+      // Firebase login
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
@@ -70,25 +74,22 @@ export default function LoginScreen({ navigation, navigateWithLoader }) {
       );
       const user = userCredential.user;
 
-      // Fetch user name
+      // Fetch user profile
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
+
       let name = "User";
       if (docSnap.exists()) {
-        name = docSnap.data().name || "User";
-        setUserName(name);
+        name = docSnap.data().name || "Suniol";
       }
 
-      setLoading(false);
-      // Alert.alert("Welcome Back", `Hello, ${name}!`);
+      // update global drawer username
+      setUserName(name);
 
-      // ✅ Navigate into drawer (Main) and open Home
-      navigateWithLoader(() =>
-        navigation.reset({
-          index: 0,
-          routes: [{ name: "Main", params: { userName: name } }], // Navigate to drawer
-        })
-      );
+      setLoading(false);
+
+      // ✅ Just navigate to Home, loader will handle animation
+      navigateWithLoader(() => navigation.navigate("Home"));
     } catch (error) {
       setLoading(false);
       Alert.alert("Login Failed", error.message);
@@ -96,7 +97,7 @@ export default function LoginScreen({ navigation, navigateWithLoader }) {
   };
 
   return (
-    <LinearGradient colors={[ "#800000", "#ff6f6fff"]} style={styles.container}>
+    <LinearGradient colors={["#800000", "#ff6f6fff"]} style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <Animated.View style={[styles.keyboardView, animatedStyle]}>
           <Animated.Text
@@ -134,33 +135,42 @@ export default function LoginScreen({ navigation, navigateWithLoader }) {
           </Animated.View>
 
           <Animated.View entering={FadeInUp.delay(800).duration(800)}>
-            <TouchableOpacity activeOpacity={0.8} style={styles.loginButton} onPress={handleLogin}>
-            {/* <TouchableOpacity
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={styles.loginButton}
+              onPress={handleLogin}
+            >
+              {/* <TouchableOpacity
               activeOpacity={0.8}
               style={styles.loginButton}
               onPress={() =>
+                {setUserName("Sunil");
                 navigateWithLoader(() =>
                   navigation.reset({
                     index: 0,
-                    routes: [{ name: "Main", params: { userName: "Sunil" } }], // Navigate to drawer
+                    routes: [{ name: "Home", params: { userName: "Sunil" } }], // Navigate to drawer
                   })
                 )
-              }
+              }}
             > */}
               <Text style={styles.loginText}>Login</Text>
             </TouchableOpacity>
           </Animated.View>
-          <Animated.View entering={FadeInUp.delay(800).duration(800)}>
-            <TouchableOpacity activeOpacity={0.8} style={styles.loginButton} onPress={handleLogin}>
+          {/* <Animated.View entering={FadeInUp.delay(800).duration(800)}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={styles.loginButton}
+              onPress={handleLogin}
+            >
               <GoogleSignInButton
-  onSuccess={(user) => {
-    console.log("Logged in with Google:", user.displayName);
-    // Navigate to Main screen or do whatever you need
-  }}
-/>
+                onSuccess={(user) => {
+                  console.log("Logged in with Google:", user.displayName);
+                  // Navigate to Main screen or do whatever you need
+                }}
+              />
             </TouchableOpacity>
-          </Animated.View>
-          <Animated.Text
+          </Animated.View> */}
+          {/* <Animated.Text
             entering={FadeInUp.delay(1000).duration(800)}
             style={styles.registerText}
           >
@@ -173,7 +183,7 @@ export default function LoginScreen({ navigation, navigateWithLoader }) {
             >
               Sign Up
             </Text>
-          </Animated.Text>
+          </Animated.Text> */}
         </Animated.View>
       </TouchableWithoutFeedback>
 

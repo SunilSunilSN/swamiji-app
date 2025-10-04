@@ -137,7 +137,7 @@ export default function RegistrationScreen({ navigation, navigateWithLoader }) {
           </Animated.View>
 
           {/* Back to Login */}
-          <Animated.Text
+          {/* <Animated.Text
             entering={FadeInUp.delay(1000).duration(800)}
             style={styles.loginText}
           >
@@ -150,7 +150,7 @@ export default function RegistrationScreen({ navigation, navigateWithLoader }) {
             >
               Login
             </Text>
-          </Animated.Text>
+          </Animated.Text> */}
         </Animated.View>
       </TouchableWithoutFeedback>
 

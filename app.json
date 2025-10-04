@@ -1,32 +1,38 @@
 {
   "expo": {
-    "name": "sriramanujavani",
+    "name": "శ్రీరామానుజవాణి",
     "slug": "swamiji-app",
     "version": "1.0.0",
-    "scheme": "sriramanujavani",
+    "scheme": "com.sunil_s_n.swamijiapp",
     "orientation": "portrait",
-    "icon": "./src/assets/Images/Icon-512.jpg",
+    "icon": "./src/assets/Images/Icon_New_512x512.jpg",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./src/assets/Images/Icon-512.jpg",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./src/assets/Images/Icon_New_512x512.jpg",
+    "resizeMode": "contain",
+      "backgroundColor": "#39B54A"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sunil_s_n.swamijiapp",
+      "googleServicesFile": "./ios/google-services.json",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/Images/Icon-512.jpg",
+        "foregroundImage": "./src/assets/Images/Icon_New_512x512.jpg",
         "backgroundColor": "#ffffff"
       },
+      "googleServicesFile": "./android/google-services.json",
       "userInterfaceStyle": "light",
       "edgeToEdgeEnabled": true,
       "package": "com.sunil_s_n.swamijiapp"
     },
     "web": {
-      "favicon": "./src/assets/Images/icon-1242-2436.jpg"
+      "favicon": "./src/assets/Images/Icon_New_1242x2436.jpg"
     },
     "extra": {
       "eas": {

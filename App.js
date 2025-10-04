@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-
 import { AppNavigator } from "./src/components/AppNavigator";
 import Loader from "./src/components/Loader";
 
@@ -17,8 +16,8 @@ export default function App() {
       navigationFunc();
     }, 800);
   };
-
   return (
+
     <View style={{ flex: 1 }}>
       <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
       
