@@ -170,7 +170,7 @@ export default function LoginScreen({
               />
             </TouchableOpacity>
           </Animated.View> */}
-          {/* <Animated.Text
+          <Animated.Text
             entering={FadeInUp.delay(1000).duration(800)}
             style={styles.registerText}
           >
@@ -183,7 +183,7 @@ export default function LoginScreen({
             >
               Sign Up
             </Text>
-          </Animated.Text> */}
+          </Animated.Text>
         </Animated.View>
       </TouchableWithoutFeedback>
 

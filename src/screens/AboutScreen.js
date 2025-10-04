@@ -25,43 +25,8 @@ import ImageCarousel from "../components/ImageCarousel";
 import AnimatedImageSection from "../components/AnimatedImageSection";
 import { Video } from "expo-av";
 import AnimatedTabSection from "../components/AnimatedTabSection";
-const carouselData = [
-  {
-    image: require("../assets/Images/img1.jpg"),
-    title: "Beautiful Sunset",
-    description: "Nature at its best",
-  },
-  {
-    image: require("../assets/Images/img2.jpg"),
-    title: "Mountain Peak",
-    description: "Adventure awaits",
-  },
-  {
-    image: require("../assets/Images/img3.jpg"),
-    title: "Ocean Waves",
-    description: "Feel the breeze",
-  },
-];
-const tabs = [
-  {
-    id: 0,
-    title: "SPIRITUAL BOOKS",
-    content:
-      "Transformative Spiritual Reads: Enlightenment, Inner Peace, and Self-Discovery Spiritual Books Spiritual books offer profound insights into the realms of inner growth, enlightenment, and the exploration of the human spirit. These books span various traditions, philosophies, and practices, providing readers with a wide range of perspectives on life, purpose, and the nature of existence.",
-  },
-  {
-    id: 1,
-    title: "SPIRITUAL MEDIA",
-    content:
-      "Spiritual Media: Films, Documentaries, and Podcasts for Mindful Exploration' Spiritual Media Spiritual media encompasses a rich tapestry of visual and auditory experiences that nourish the soul and expand the mind. From thought-provoking films and captivating documentaries to enlightening podcasts and mesmerizing art, spiritual media engages with the profound questions of existence, the interconnectedness of humanity, and the exploration of the divine.",
-  },
-  {
-    id: 2,
-    title: "BHAKTINIVEDANA",
-    content:
-      "Bhakti Nivedana: Devotional Practices in Hinduism' Bhaktinivedana 'Bhakti' is a Sanskrit term that signifies a deep and devotional connection to the divine, and 'Nivedana' refers to the act of offering or surrendering. In the context of Hinduism, 'Bhakti Nivedana' represents a heartfelt and complete surrender to the chosen deity, expressing profound love, devotion, and humility.",
-  },
-];
+import { debounce } from "lodash";
+
 export default function AboutScreen({ navigation, route, navigateWithLoader }) {
   const [userName, setUserName] = useState(route.params?.userName || "User");
   const [loading, setLoading] = useState(false);
@@ -145,7 +110,6 @@ const handleInView = useCallback((inView, index) => {
                 justifyContent: "center",
                 height: 200,
                 overflow: "hidden",
-                opacity: 0,
               }}
             >
               {/* Text overlay */}

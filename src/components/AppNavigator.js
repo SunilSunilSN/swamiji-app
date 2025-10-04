@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { View, Text, StyleSheet, Alert, Animated } from "react-native";
+import { View, Text, StyleSheet, Alert, Animated, TouchableOpacity  } from "react-native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -12,11 +12,21 @@ import HomeScreen from "../screens/HomeScreen";
 import AboutScreen from "../screens/AboutScreen";
 import LoginScreen from "../screens/LoginScreen";
 import RegistrationScreen from "../screens/RegistrationScreen";
-
+import { RFValue } from "react-native-responsive-fontsize";
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from "react-native-responsive-dimensions";
 const Drawer = createDrawerNavigator();
 
 // Custom Drawer
-function CustomDrawerContent({ navigation, state, descriptors, userName, setUserName }) {
+function CustomDrawerContent({
+  navigation,
+  state,
+  descriptors,
+  userName,
+  setUserName,
+}) {
   const isDrawerOpen = useDrawerStatus() === "open";
 
   const slideAnims = useRef(state.routes.map(() => new Animated.Value(-50))).current;
@@ -63,25 +73,56 @@ function CustomDrawerContent({ navigation, state, descriptors, userName, setUser
     ]);
   };
 
+  const handleLogin = () => {
+    navigation.navigate("Login");
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView>
-        <View style={styles.drawerHeader}>
-          <Text style={styles.drawerUsername}>
-            {userName ? `Hello, ${userName}!` : "Welcome!"}
-          </Text>
-        </View>
+        {/* Header with Welcome + Login button */}
+<View style={styles.drawerHeader}>
+  <Text style={styles.drawerUsername}>
+    {userName ? `Hello, ${userName}!` : "Welcome!"}
+  </Text>
 
+  {!userName && (
+    <TouchableOpacity
+      onPress={handleLogin}
+      style={{
+        backgroundColor: "#800000",
+        paddingVertical: responsiveHeight(1.2),
+        paddingHorizontal: responsiveWidth(4),
+        borderRadius: responsiveWidth(2),
+      }}
+    >
+      <Text
+        style={{
+          color: "#fff",
+          fontWeight: "bold",
+          fontSize: RFValue(14),
+        }}
+      >
+        Login
+      </Text>
+    </TouchableOpacity>
+  )}
+</View>
+
+        {/* Drawer Items */}
         {state.routes.map((route, index) => {
           const focused = state.index === index;
           const { title, drawerLabel } = descriptors[route.key].options;
 
+          // Skip Login screen from drawer list
+          if (route.name === "Login" || route.name === "Registration") return null;
+
           let iconName = "ellipse-outline";
           if (route.name === "Home") iconName = focused ? "home" : "home-outline";
           if (route.name === "About")
-            iconName = focused ? "information-circle" : "information-circle-outline";
-          if (route.name === "Login") iconName = "log-in-outline";
-          if (route.name === "Registration") iconName = "person-add-outline";
+            iconName = focused
+              ? "information-circle"
+              : "information-circle-outline";
 
           return (
             <Animated.View
@@ -94,9 +135,7 @@ function CustomDrawerContent({ navigation, state, descriptors, userName, setUser
               <DrawerItem
                 label={drawerLabel ?? title ?? route.name}
                 focused={focused}
-                onPress={() =>
-                  navigation.navigate(route.name) // ✅ loader will trigger in screen
-                }
+                onPress={() => navigation.navigate(route.name)}
                 labelStyle={{
                   fontSize: 16,
                   fontWeight: focused ? "bold" : "normal",
@@ -107,7 +146,9 @@ function CustomDrawerContent({ navigation, state, descriptors, userName, setUser
                   borderRadius: 8,
                   marginHorizontal: 8,
                 }}
-                icon={({ size }) => <Ionicons name={iconName} size={size} color="#800000" />}
+                icon={({ size }) => (
+                  <Ionicons name={iconName} size={size} color="#800000" />
+                )}
               />
             </Animated.View>
           );
@@ -115,19 +156,23 @@ function CustomDrawerContent({ navigation, state, descriptors, userName, setUser
       </DrawerContentScrollView>
 
       {/* Logout pinned at bottom */}
-      <View style={{ marginBottom: 40 }}>
-        <DrawerItem
-          label="Logout"
-          onPress={handleLogout}
-          labelStyle={{ fontSize: 16, fontWeight: "bold", color: "#800000" }}
-          style={{
-            backgroundColor: "#ffe6e6",
-            borderRadius: 8,
-            marginHorizontal: 8,
-          }}
-          icon={({ size }) => <Ionicons name="log-out-outline" size={size} color="#800000" />}
-        />
-      </View>
+      {userName && (
+        <View style={{ marginBottom: 40 }}>
+          <DrawerItem
+            label="Logout"
+            onPress={handleLogout}
+            labelStyle={{ fontSize: 16, fontWeight: "bold", color: "#800000" }}
+            style={{
+              backgroundColor: "#ffe6e6",
+              borderRadius: 8,
+              marginHorizontal: 8,
+            }}
+            icon={({ size }) => (
+              <Ionicons name="log-out-outline" size={size} color="#800000" />
+            )}
+          />
+        </View>
+      )}
     </View>
   );
 }
@@ -142,7 +187,11 @@ export const AppNavigator = ({ userName, setUserName, navigateWithLoader }) => {
         headerTitleStyle: { fontWeight: "bold" },
       }}
       drawerContent={(props) => (
-        <CustomDrawerContent {...props} userName={userName} setUserName={setUserName} />
+        <CustomDrawerContent
+          {...props}
+          userName={userName}
+          setUserName={setUserName}
+        />
       )}
     >
       <Drawer.Screen name="Home">
@@ -155,7 +204,13 @@ export const AppNavigator = ({ userName, setUserName, navigateWithLoader }) => {
       </Drawer.Screen>
 
       <Drawer.Screen name="About">
-        {(props) => <AboutScreen {...props} navigateWithLoader={navigateWithLoader} />}
+        {(props) => (
+          <AboutScreen
+            {...props}
+            setUserName={setUserName}
+            navigateWithLoader={navigateWithLoader}
+          />
+        )}
       </Drawer.Screen>
 
       <Drawer.Screen name="Login">
@@ -178,13 +233,15 @@ export const AppNavigator = ({ userName, setUserName, navigateWithLoader }) => {
 };
 
 const styles = StyleSheet.create({
-  drawerHeader: {
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    marginBottom: 10,
-  },
+drawerHeader: {
+  flexDirection: "row", // row layout
+  justifyContent: "space-between", // push Welcome and Login to sides
+  alignItems: "center",
+  paddingHorizontal: responsiveWidth(4),
+  paddingVertical: responsiveHeight(2),
+  backgroundColor: "#fff",
+  marginBottom: 10,
+},
   drawerUsername: {
     color: "#800000",
     fontSize: 20,
