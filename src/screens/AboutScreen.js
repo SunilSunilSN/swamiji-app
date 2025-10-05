@@ -1,5 +1,10 @@
-
-import React, { useEffect, useState, useRef, useCallback, PixelRatio } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  PixelRatio,
+} from "react";
 import {
   Text,
   TouchableOpacity,
@@ -10,71 +15,43 @@ import {
   Easing,
   Image,
   StyleSheet,
-  Dimensions 
+  Dimensions,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Animatable from "react-native-animatable";
 import { IOScrollView, InView } from "react-native-intersection-observer";
 import Counter from "../components/Counter";
-import { auth } from "../../firebaseConfig";
-import { signOut } from "firebase/auth";
 import Footer from "../components/Footer";
 import Loader from "../components/Loader";
-import ImageCarousel from "../components/ImageCarousel";
-import AnimatedImageSection from "../components/AnimatedImageSection";
-import { Video } from "expo-av";
-import AnimatedTabSection from "../components/AnimatedTabSection";
-import { debounce } from "lodash";
-
+import { PanResponder } from "react-native";
 export default function AboutScreen({ navigation, route, navigateWithLoader }) {
-  const [userName, setUserName] = useState(route.params?.userName || "User");
   const [loading, setLoading] = useState(false);
-  const scrollRef1 = useRef(null);
-  const scrollRef2 = useRef(null);
-  const [showScrollUp1, setShowScrollUp1] = useState(true);
-  const [showScrollUp2, setShowScrollUp2] = useState(true);
   const welcomeRef = useRef(null);
-  const aboutRef = useRef(null);
-  const aboutVidRef = useRef(null);
-  const fadeAnim = useRef(new Animated.Value(1)).current;
-  const videoRef = useRef(null);
-  const animationIn = "fadeInUp";
-  const animationOut = "fadeOutDown";
   const addRef = (ref) => {
     if (ref && !sectionRefs.current.includes(ref)) {
       sectionRefs.current.push(ref);
     }
   };
-const handleInView = useCallback((inView, index) => {
-  if (inView) {
-    sectionRefs.current[index]?.fadeInUp(800);
-  }
-}, []);
-  const sectionRefs = useRef([]);
-  const handlePlaybackStatus = (status) => {
-    if (status.didJustFinish) {
-      // Fade out
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 800,
-        useNativeDriver: true,
-      }).start(() => {
-        // Restart video
-        videoRef.current.replayAsync().then(() => {
-          // Fade in
-          Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 800,
-            useNativeDriver: true,
-          }).start();
-        });
-      });
+   const sectionRefs = useRef([]);
+  const scrollRef = useRef(null);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollTo({ y: 0, animated: true });
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+  const handleInView = useCallback((inView, index) => {
+    if (inView) {
+      sectionRefs.current[index]?.fadeInUp(800);
     }
-  };
+  }, []);
+
   return (
-    <LinearGradient colors={[ "#800000", "#ff6f6fff"]} style={{ flex: 1 }}>
-      <IOScrollView>
+    <LinearGradient colors={["#800000", "#ff6f6fff"]} style={{ flex: 1 }}>
+      <IOScrollView ref={scrollRef}>
         <InView
           onChange={(inView) => {
             if (inView) welcomeRef.current?.fadeInDown(1000);
@@ -317,7 +294,11 @@ const handleInView = useCallback((inView, index) => {
           </InView>
         </View>
         <Counter />
-        <Footer />
+        <Footer
+          navigation={navigation}
+          route={route}
+          navigateWithLoader={navigateWithLoader}
+        />
       </IOScrollView>
       <Loader visible={loading} />
     </LinearGradient>

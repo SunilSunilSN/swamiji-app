@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   TextInput,
@@ -8,12 +8,13 @@ import {
   Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
+import Animated, { FadeInDown, FadeInUp, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 import styles from "../styles/RegistrationStyle";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebaseConfig"; // db for Firestore
 import { doc, setDoc } from "firebase/firestore";
 import Loader from "../components/Loader";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function RegistrationScreen({ navigation, navigateWithLoader }) {
   const [name, setName] = useState("");
@@ -21,7 +22,16 @@ export default function RegistrationScreen({ navigation, navigateWithLoader }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+const isFocused = useIsFocused();
+const [key, setKey] = useState(0); // used to force re-mount
 
+useEffect(() => {
+  if (isFocused) {
+    // Force re-mount Animated.View so entering animations run again
+    setKey((prev) => prev + 1);
+  }
+}, [isFocused]);
+  const offsetY = useSharedValue(0);
   const handleRegister = async () => {
     if (!name || !mobile || !email || !password) {
       Alert.alert("Error", "Please fill all fields.");
@@ -54,11 +64,13 @@ export default function RegistrationScreen({ navigation, navigateWithLoader }) {
       Alert.alert("Registration Failed", error.message);
     }
   };
-
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: offsetY.value }],
+  }));
   return (
     <LinearGradient colors={[ "#800000", "#ff6f6fff"]} style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <Animated.View style={styles.keyboardView}>
+        <Animated.View key={key} style={[styles.keyboardView, animatedStyle]}>
           <Animated.Text
             entering={FadeInDown.delay(200).duration(800)}
             style={styles.title}

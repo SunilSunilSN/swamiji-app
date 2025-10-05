@@ -1,5 +1,12 @@
 import React, { useRef, useEffect } from "react";
-import { View, Text, StyleSheet, Alert, Animated, TouchableOpacity  } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  Animated,
+  TouchableOpacity,
+} from "react-native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -29,8 +36,12 @@ function CustomDrawerContent({
 }) {
   const isDrawerOpen = useDrawerStatus() === "open";
 
-  const slideAnims = useRef(state.routes.map(() => new Animated.Value(-50))).current;
-  const fadeAnims = useRef(state.routes.map(() => new Animated.Value(0))).current;
+  const slideAnims = useRef(
+    state.routes.map(() => new Animated.Value(-50))
+  ).current;
+  const fadeAnims = useRef(
+    state.routes.map(() => new Animated.Value(0))
+  ).current;
 
   useEffect(() => {
     if (isDrawerOpen) {
@@ -81,33 +92,33 @@ function CustomDrawerContent({
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView>
         {/* Header with Welcome + Login button */}
-<View style={styles.drawerHeader}>
-  <Text style={styles.drawerUsername}>
-    {userName ? `Hello, ${userName}!` : "Welcome!"}
-  </Text>
+        <View style={styles.drawerHeader}>
+          <Text style={styles.drawerUsername}>
+            {userName ? `Hello, ${userName}!` : "Welcome!"}
+          </Text>
 
-  {!userName && (
-    <TouchableOpacity
-      onPress={handleLogin}
-      style={{
-        backgroundColor: "#800000",
-        paddingVertical: responsiveHeight(1.2),
-        paddingHorizontal: responsiveWidth(4),
-        borderRadius: responsiveWidth(2),
-      }}
-    >
-      <Text
-        style={{
-          color: "#fff",
-          fontWeight: "bold",
-          fontSize: RFValue(14),
-        }}
-      >
-        Login
-      </Text>
-    </TouchableOpacity>
-  )}
-</View>
+          {!userName && (
+            <TouchableOpacity
+              onPress={handleLogin}
+              style={{
+                backgroundColor: "#800000",
+                paddingVertical: responsiveHeight(1.2),
+                paddingHorizontal: responsiveWidth(4),
+                borderRadius: responsiveWidth(2),
+              }}
+            >
+              <Text
+                style={{
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: RFValue(14),
+                }}
+              >
+                Login
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
 
         {/* Drawer Items */}
         {state.routes.map((route, index) => {
@@ -115,10 +126,12 @@ function CustomDrawerContent({
           const { title, drawerLabel } = descriptors[route.key].options;
 
           // Skip Login screen from drawer list
-          if (route.name === "Login" || route.name === "Registration") return null;
+          if (route.name === "Login" || route.name === "Registration")
+            return null;
 
           let iconName = "ellipse-outline";
-          if (route.name === "Home") iconName = focused ? "home" : "home-outline";
+          if (route.name === "Home")
+            iconName = focused ? "home" : "home-outline";
           if (route.name === "About")
             iconName = focused
               ? "information-circle"
@@ -182,7 +195,12 @@ export const AppNavigator = ({ userName, setUserName, navigateWithLoader }) => {
     <Drawer.Navigator
       initialRouteName="Home"
       screenOptions={{
-        headerStyle: { backgroundColor: "#800000" },
+        headerStyle: {
+          backgroundColor: "#800000",
+          elevation: 0, // remove shadow on Android
+          shadowOpacity: 0, // remove shadow on iOS
+          borderBottomWidth: 0,
+        }, // remove bottom border },
         headerTintColor: "#fff",
         headerTitleStyle: { fontWeight: "bold" },
       }}
@@ -225,7 +243,10 @@ export const AppNavigator = ({ userName, setUserName, navigateWithLoader }) => {
 
       <Drawer.Screen name="Registration">
         {(props) => (
-          <RegistrationScreen {...props} navigateWithLoader={navigateWithLoader} />
+          <RegistrationScreen
+            {...props}
+            navigateWithLoader={navigateWithLoader}
+          />
         )}
       </Drawer.Screen>
     </Drawer.Navigator>
@@ -233,15 +254,15 @@ export const AppNavigator = ({ userName, setUserName, navigateWithLoader }) => {
 };
 
 const styles = StyleSheet.create({
-drawerHeader: {
-  flexDirection: "row", // row layout
-  justifyContent: "space-between", // push Welcome and Login to sides
-  alignItems: "center",
-  paddingHorizontal: responsiveWidth(4),
-  paddingVertical: responsiveHeight(2),
-  backgroundColor: "#fff",
-  marginBottom: 10,
-},
+  drawerHeader: {
+    flexDirection: "row", // row layout
+    justifyContent: "space-between", // push Welcome and Login to sides
+    alignItems: "center",
+    paddingHorizontal: responsiveWidth(4),
+    paddingVertical: responsiveHeight(2),
+    backgroundColor: "#fff",
+    marginBottom: 10,
+  },
   drawerUsername: {
     color: "#800000",
     fontSize: 20,

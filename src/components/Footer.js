@@ -16,7 +16,7 @@ import {
 } from "react-native-responsive-dimensions";
 import { RFValue } from "react-native-responsive-fontsize";
 
-export default function Footer() {
+export default function Footer({ navigation, navigateWithLoader, setUserName }) {
   // Animation refs
   const aboutAnim = useRef(new Animated.Value(0)).current;
   const menuAnim = useRef(new Animated.Value(0)).current;
@@ -113,9 +113,12 @@ export default function Footer() {
         <InView onChange={(inView) => inView && animateSection(menuAnim)}>
           <AnimatedSection animRef={menuAnim}>
             <Text style={styles.headingText}>Menu</Text>
-            {["Home", "Shop"].map((item) => (
-              <TouchableOpacity key={item} activeOpacity={0.7}>
-                <Text style={styles.linkText}>{item}</Text>
+            {["Home", "About"].map((item) => (
+              <TouchableOpacity key={item} activeOpacity={0.7}
+              >
+                <Text style={styles.linkText} onPress={() =>
+                navigateWithLoader(() => navigation.navigate(item))
+              }>{item} </Text>
               </TouchableOpacity>
             ))}
           </AnimatedSection>

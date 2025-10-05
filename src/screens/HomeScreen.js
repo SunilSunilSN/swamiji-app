@@ -87,6 +87,7 @@ export default function HomeScreen({ navigation, route, navigateWithLoader }) {
   const aboutVidRef = useRef(null);
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const videoRef = useRef(null);
+  const scrollRef = useRef(null);
 
   const animationIn = "fadeInUp";
   const animationOut = "fadeOutDown";
@@ -112,7 +113,15 @@ export default function HomeScreen({ navigation, route, navigateWithLoader }) {
   useEffect(() => {
     if (route.params?.userName) setUserName(route.params.userName);
   }, [route.params]);
+useEffect(() => {
+  const unsubscribe = navigation.addListener("focus", () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ y: 0, animated: true });
+    }
+  });
 
+  return unsubscribe;
+}, [navigation]);
   const handleLogout = async () => {
     setLoading(true);
     try {
@@ -128,7 +137,7 @@ export default function HomeScreen({ navigation, route, navigateWithLoader }) {
 
   return (
     <LinearGradient colors={[ "#800000", "#ff6f6fff"]} style={{ flex: 1 }}>
-      <IOScrollView>
+      <IOScrollView ref={scrollRef}>
         {/* Carousel */}
         <ImageCarousel
           data={carouselData}
@@ -315,7 +324,7 @@ export default function HomeScreen({ navigation, route, navigateWithLoader }) {
         <AnimatedTabSection tabs={tabs} />
 
         <Counter />
-        <Footer />
+        <Footer navigation={navigation} route ={route} navigateWithLoader={navigateWithLoader} />
       </IOScrollView>
 
       <Loader visible={loading} />

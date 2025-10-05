@@ -28,6 +28,7 @@ import {
 } from "react-native-responsive-dimensions";
 const { height } = Dimensions.get("window");
 import GoogleSignInButton from "../components/GoogleSignInButton";
+import { useIsFocused } from "@react-navigation/native";
 export default function LoginScreen({
   navigation,
   navigateWithLoader,
@@ -36,6 +37,15 @@ export default function LoginScreen({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+const isFocused = useIsFocused();
+const [key, setKey] = useState(0); // used to force re-mount
+
+useEffect(() => {
+  if (isFocused) {
+    // Force re-mount Animated.View so entering animations run again
+    setKey((prev) => prev + 1);
+  }
+}, [isFocused]);
 
   const offsetY = useSharedValue(0);
 
@@ -99,7 +109,7 @@ export default function LoginScreen({
   return (
     <LinearGradient colors={["#800000", "#ff6f6fff"]} style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <Animated.View style={[styles.keyboardView, animatedStyle]}>
+        <Animated.View key={key} style={[styles.keyboardView, animatedStyle]}>
           <Animated.Text
             entering={FadeInDown.delay(200).duration(800)}
             style={styles.title}
