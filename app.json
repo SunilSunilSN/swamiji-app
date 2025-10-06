@@ -3,7 +3,7 @@
     "name": "శ్రీరామానుజవాణి",
     "slug": "swamiji-app",
     "version": "1.0.0",
-    "scheme": "com.sunil_s_n.swamijiapp",
+    "scheme": "sriramanujavani",
     "orientation": "portrait",
     "icon": "./src/assets/Images/Icon_New_512x512.jpg",
     "userInterfaceStyle": "light",
