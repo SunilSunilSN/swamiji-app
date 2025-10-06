@@ -166,7 +166,7 @@ useEffect(() => {
               <Text style={styles.loginText}>Login</Text>
             </TouchableOpacity>
           </Animated.View>
-          {/* <Animated.View entering={FadeInUp.delay(800).duration(800)}>
+          <Animated.View entering={FadeInUp.delay(800).duration(800)}>
             <TouchableOpacity
               activeOpacity={0.8}
               style={styles.loginButton}
@@ -179,7 +179,7 @@ useEffect(() => {
                 }}
               />
             </TouchableOpacity>
-          </Animated.View> */}
+          </Animated.View>
           <Animated.Text
             entering={FadeInUp.delay(1000).duration(800)}
             style={styles.registerText}

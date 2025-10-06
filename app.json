@@ -16,7 +16,6 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.sunilsn.sriramanujavani",
-      "googleServicesFile": "./ios/google-services.json",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -26,7 +25,7 @@
         "foregroundImage": "./src/assets/Images/Icon_New_512x512.jpg",
         "backgroundColor": "#ffffff"
       },
-      "googleServicesFile": "./android/google-services.json",
+      "googleServicesFile": "./android/app/google-services.json",
       "userInterfaceStyle": "light",
       "edgeToEdgeEnabled": true,
       "package": "com.sunilsn.sriramanujavani"
@@ -35,9 +34,7 @@
       "favicon": "./src/assets/Images/Icon_New_1242x2436.jpg"
     },
     "owner": "sunil_s_n",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
+    "runtimeVersion": "1.0.0",
     "updates": {
       "url": "https://u.expo.dev/033926a4-610a-405f-8d4c-d0218fb21ffc"
     },
