@@ -5,13 +5,13 @@
     "version": "1.0.0",
     "scheme": "sriramanujavani",
     "orientation": "portrait",
-    "icon": "./src/assets/Images/Icon_New_512x512.jpg",
+    "icon": "./src/assets/Images/SRI_RAMANUJAVANI_APPLE.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./src/assets/Images/Icon_New_512x512.jpg",
-      "resizeMode": "contain",
-      "backgroundColor": "#39B54A"
+      "image": "./src/assets/Images/SRI_RAMANUJAVANI_APPLE.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#800000"
     },
     "ios": {
       "supportsTablet": true,
@@ -22,21 +22,34 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/Images/Icon_New_512x512.jpg",
+        "foregroundImage": "./src/assets/Images/SRI_RAMANUJAVANI_APPLE.png",
         "backgroundColor": "#ffffff"
       },
-      "googleServicesFile": "./android/app/google-services.json",
+      
+      "googleServicesFile": "./google-services.json",
       "userInterfaceStyle": "light",
       "edgeToEdgeEnabled": true,
-      "package": "com.sunilsn.sriramanujavani"
+      "package": "com.sunilsn.sriramanujavani",
+  "intentFilters": [
+    {
+      "action": "VIEW",
+      "category": ["BROWSABLE", "DEFAULT"],
+      "data": [
+        { "scheme": "upi" },
+        { "scheme": "tez" },
+        { "scheme": "phonepe" },
+        { "scheme": "paytm" }
+      ]
+    }
+  ]
     },
     "web": {
-      "favicon": "./src/assets/Images/Icon_New_1242x2436.jpg"
+      "favicon": "./src/assets/Images/SRI_RAMANUJAVANI_APPLE.png"
     },
     "owner": "sunil_s_n",
     "runtimeVersion": "1.0.0",
     "updates": {
-      "url": "https://u.expo.dev/033926a4-610a-405f-8d4c-d0218fb21ffc"
+      "url": "https://u.expo.dev/sriramanujavani-32f08"
     },
     "extra": {
       "eas": {

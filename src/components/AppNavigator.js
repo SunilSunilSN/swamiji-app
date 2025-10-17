@@ -18,6 +18,8 @@ import { Ionicons } from "@expo/vector-icons";
 import HomeScreen from "../screens/HomeScreen";
 import AboutScreen from "../screens/AboutScreen";
 import LoginScreen from "../screens/LoginScreen";
+import BhakNivScreen from "../screens/BhakNivScreen";
+import PaymentScreen from "../screens/PaymentScreen";
 import RegistrationScreen from "../screens/RegistrationScreen";
 import { RFValue } from "react-native-responsive-fontsize";
 import {
@@ -126,7 +128,11 @@ function CustomDrawerContent({
           const { title, drawerLabel } = descriptors[route.key].options;
 
           // Skip Login screen from drawer list
-          if (route.name === "Login" || route.name === "Registration")
+          if (
+            route.name === "Login" ||
+            route.name === "Registration" ||
+            route.name === "PaymentScreen"
+          )
             return null;
 
           let iconName = "ellipse-outline";
@@ -136,6 +142,10 @@ function CustomDrawerContent({
             iconName = focused
               ? "information-circle"
               : "information-circle-outline";
+              if(route.name === "BhakNivScreen") 
+                            iconName = focused
+              ? "arrow-down-left-box"
+              : "arrow-down-left-box-outline";
 
           return (
             <Animated.View
@@ -221,6 +231,20 @@ export const AppNavigator = ({ userName, setUserName, navigateWithLoader }) => {
         )}
       </Drawer.Screen>
 
+      <Drawer.Screen
+        name="BhakNivScreen"
+        options={{
+          title: "Bhakthi Nivedana", // this is what shows in the drawer
+        }}
+      >
+        {(props) => (
+          <BhakNivScreen
+            {...props}
+            navigateWithLoader={navigateWithLoader} // ✅ loader here
+          />
+        )}
+      </Drawer.Screen>
+
       <Drawer.Screen name="About">
         {(props) => (
           <AboutScreen
@@ -247,6 +271,17 @@ export const AppNavigator = ({ userName, setUserName, navigateWithLoader }) => {
             {...props}
             navigateWithLoader={navigateWithLoader}
           />
+        )}
+      </Drawer.Screen>
+
+      <Drawer.Screen
+        name="PaymentScreen"
+        options={{
+          title: "Payment", // this is what shows in the drawer
+        }}
+      >
+        {(props) => (
+          <PaymentScreen {...props} navigateWithLoader={navigateWithLoader} />
         )}
       </Drawer.Screen>
     </Drawer.Navigator>

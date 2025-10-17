@@ -9,7 +9,6 @@ import {
   StyleSheet,
   Platform
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Animatable from "react-native-animatable";
 import { IOScrollView, InView } from "react-native-intersection-observer";
@@ -18,7 +17,6 @@ import { signOut } from "firebase/auth";
 import Loader from "../components/Loader";
 import ImageCarousel from "../components/ImageCarousel";
 import Footer from "../components/Footer";
-import AnimatedImageSection from "../components/AnimatedImageSection";
 import { Video } from "expo-av";
 import AnimatedTabSection from "../components/AnimatedTabSection";
 import Counter from "../components/Counter";

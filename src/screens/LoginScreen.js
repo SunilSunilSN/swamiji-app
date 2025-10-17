@@ -17,9 +17,9 @@ import Animated, {
 } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "../styles/LoginStyle";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../../firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword } from "@react-native-firebase/auth";
+import { getFirestore, doc, getDoc } from "@react-native-firebase/firestore";
+import { getApp } from "@react-native-firebase/app";
 import Loader from "../components/Loader";
 import { RFValue } from "react-native-responsive-fontsize";
 import {
@@ -39,7 +39,10 @@ export default function LoginScreen({
   const [loading, setLoading] = useState(false);
 const isFocused = useIsFocused();
 const [key, setKey] = useState(0); // used to force re-mount
-
+// Initialize modular instances
+const app = getApp();
+const auth = getAuth(app);
+const db = getFirestore(app);
 useEffect(() => {
   if (isFocused) {
     // Force re-mount Animated.View so entering animations run again
@@ -68,43 +71,41 @@ useEffect(() => {
     transform: [{ translateY: offsetY.value }],
   }));
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Please enter email and password.");
-      return;
+const handleLogin = async () => {
+  if (!email || !password) {
+    Alert.alert("Error", "Please enter email and password.");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    // 1️⃣ Sign in user
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // 2️⃣ Fetch user profile from Firestore
+    const docRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    let name = "User";
+    if (docSnap.exists()) {
+      name = docSnap.data()?.name || "Suniol";
     }
-    setLoading(true);
 
-    try {
-      // Firebase login
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
+    // 3️⃣ Update global username (drawer or state)
+    setUserName(name);
 
-      // Fetch user profile
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
+    setLoading(false);
 
-      let name = "User";
-      if (docSnap.exists()) {
-        name = docSnap.data().name || "Suniol";
-      }
-
-      // update global drawer username
-      setUserName(name);
-
-      setLoading(false);
-
-      // ✅ Just navigate to Home, loader will handle animation
-      navigateWithLoader(() => navigation.navigate("Home"));
-    } catch (error) {
-      setLoading(false);
-      Alert.alert("Login Failed", error.message);
-    }
-  };
+    // 4️⃣ Navigate to Home screen
+    navigateWithLoader(() => navigation.navigate("Home"));
+  } catch (error) {
+    setLoading(false);
+    console.error("Login Failed:", error);
+    Alert.alert("Login Failed", error.message || "Something went wrong");
+  }
+};
 
   return (
     <LinearGradient colors={["#800000", "#ff6f6fff"]} style={styles.container}>
@@ -166,7 +167,7 @@ useEffect(() => {
               <Text style={styles.loginText}>Login</Text>
             </TouchableOpacity>
           </Animated.View>
-          <Animated.View entering={FadeInUp.delay(800).duration(800)}>
+          {/* <Animated.View entering={FadeInUp.delay(800).duration(800)}>
             <TouchableOpacity
               activeOpacity={0.8}
               style={styles.loginButton}
@@ -179,7 +180,7 @@ useEffect(() => {
                 }}
               />
             </TouchableOpacity>
-          </Animated.View>
+          </Animated.View> */}
           <Animated.Text
             entering={FadeInUp.delay(1000).duration(800)}
             style={styles.registerText}
