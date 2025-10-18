@@ -130,8 +130,9 @@ function CustomDrawerContent({
           // Skip Login screen from drawer list
           if (
             route.name === "Login" ||
-            route.name === "Registration" ||
-            route.name === "PaymentScreen"
+            route.name === "Registration" 
+            // ||
+            // route.name === "PaymentScreen"
           )
             return null;
 

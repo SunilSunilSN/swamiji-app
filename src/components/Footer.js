@@ -137,7 +137,7 @@ export default function Footer({ navigation, navigateWithLoader, setUserName }) 
             <TouchableOpacity onPress={() => Linking.openURL("tel:08662420820")}>
               <View style={styles.row}>
                 <Ionicons name="call" size={RFValue(16)} color="brown" />
-                <Text style={styles.bodyText}>0866-2420820</Text>
+                <Text style={styles.bodyText}>+91 7097078929</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity

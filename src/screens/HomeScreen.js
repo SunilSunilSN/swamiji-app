@@ -17,7 +17,7 @@ import { signOut } from "firebase/auth";
 import Loader from "../components/Loader";
 import ImageCarousel from "../components/ImageCarousel";
 import Footer from "../components/Footer";
-import { Video } from "expo-av";
+// import { Video } from "expo-av";
 import AnimatedTabSection from "../components/AnimatedTabSection";
 import Counter from "../components/Counter";
 
@@ -231,33 +231,24 @@ useEffect(() => {
         {/* Video Section */}
         <View style={styles.sectionContainer}>
           <View style={styles.sectionBox}>
+            <Animatable.Image
+              ref={aboutVidRef}
+              animation="zoomIn"
+              duration={2000}
+              easing="ease-out"
+              source={require("../assets/Images/back.jpg")}
+              style={styles.bgImage}
+              pointerEvents="none" // <-- Add this
+            />
+            {/* Dark Overlay */}
+            <View style={[styles.overlay, { zIndex: 2 }]} pointerEvents="none" />
+            <View style={{ flex: 1, zIndex: 3 }}>
             <InView
               onChange={(inView) => {
-                if (inView) {
-                  aboutVidRef.current?.[animationIn]?.(800);
-                } else {
-                  aboutVidRef.current?.[animationOut]?.(400);
-                }
+                if (inView) aboutVidRef.current?.zoomIn(800);
+                else aboutVidRef.current?.zoomOut(400);
               }}
             >
-              <Animated.View
-                style={[styles.videoWrapper, { opacity: fadeAnim }]}
-              >
-                <Video
-                  ref={videoRef}
-                  source={require("../assets/Videos/swamiji-video.mp4")}
-                  rate={1.0}
-                  volume={0}
-                  isMuted
-                  resizeMode="cover"
-                  shouldPlay
-                  isLooping
-                  onPlaybackStatusUpdate={handlePlaybackStatus}
-                  style={styles.video}
-                />
-              </Animated.View>
-
-              <View style={styles.overlay} />
 
               <ScrollView
                 ref={scrollRef2}
@@ -270,11 +261,7 @@ useEffect(() => {
                 }}
                 nestedScrollEnabled={Platform.OS === "android"}
               >
-                <Animatable.View
-                  ref={aboutVidRef}
-                  animation="fadeInUp"
-                  duration={1200}
-                >
+              <Animatable.View animation="fadeInUp" duration={1200}>
                   <Text style={styles.title}>Our Future Goal</Text>
                   <Text style={styles.subTitle}>
                     Towards spiritual prosperity and peace
@@ -313,7 +300,8 @@ useEffect(() => {
                   </TouchableOpacity>
                 </Animatable.View>
               )}
-            </InView>
+              </InView>
+              </View>
           </View>
         </View>
         

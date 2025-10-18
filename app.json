@@ -25,23 +25,33 @@
         "foregroundImage": "./src/assets/Images/SRI_RAMANUJAVANI_APPLE.png",
         "backgroundColor": "#ffffff"
       },
-      
       "googleServicesFile": "./google-services.json",
       "userInterfaceStyle": "light",
       "edgeToEdgeEnabled": true,
       "package": "com.sunilsn.sriramanujavani",
-  "intentFilters": [
-    {
-      "action": "VIEW",
-      "category": ["BROWSABLE", "DEFAULT"],
-      "data": [
-        { "scheme": "upi" },
-        { "scheme": "tez" },
-        { "scheme": "phonepe" },
-        { "scheme": "paytm" }
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ],
+          "data": [
+            {
+              "scheme": "upi"
+            },
+            {
+              "scheme": "tez"
+            },
+            {
+              "scheme": "phonepe"
+            },
+            {
+              "scheme": "paytm"
+            }
+          ]
+        }
       ]
-    }
-  ]
     },
     "web": {
       "favicon": "./src/assets/Images/SRI_RAMANUJAVANI_APPLE.png"
@@ -49,12 +59,15 @@
     "owner": "sunil_s_n",
     "runtimeVersion": "1.0.0",
     "updates": {
-      "url": "https://u.expo.dev/sriramanujavani-32f08"
+      "url": "https://u.expo.dev/033926a4-610a-405f-8d4c-d0218fb21ffc"
     },
     "extra": {
       "eas": {
         "projectId": "033926a4-610a-405f-8d4c-d0218fb21ffc"
       }
-    }
+    },
+    "plugins": [
+      "expo-video"
+    ]
   }
 }

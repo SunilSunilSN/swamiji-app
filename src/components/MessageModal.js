@@ -3,7 +3,7 @@ import { View, Text, Modal, TouchableOpacity, StyleSheet } from "react-native";
 
 export default function MessageModal({ visible, message, type = "error", onClose }) {
   const bgColor = type === "error" ? "#800000" : type === "success" ? "#4CAF50" : "#ff6f6fff";
-  const textColor = type === "info" ? "#000" : "#fff"; // ensure contrast for readability
+  const textColor = "#000"  // ensure contrast for readability
 
   return (
     <Modal transparent visible={visible} animationType="fade">
